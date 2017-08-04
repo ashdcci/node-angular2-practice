@@ -9,6 +9,10 @@ db = require('../config/db');
 //   return
 // })
 
+/**
+ * methods for hybrid schema start
+ */
+
 router.post('/create',function(req, res, next){
 
 
@@ -39,38 +43,73 @@ router.post('/comment',function(req, res, next){
     return
   }
 
-  var comment = {};
-  comment.user = req.body.user_id
-  comment._id =  mongojs.ObjectId()
-  comment.message =  req.body.message
-  comment.dateCreated = new Date()
-  comment.like = 0
-  console.log(comment,req.body.post_id)
+  comment_id = (req.body.comment_id!="") ? req.body.comment_id : 0
 
-  db.user_posts.update({
-    _id: mongojs.ObjectId(req.body.post_id)
-  }, {$push: {'comments':{
-                        'user':req.body.user_id,
-                        '_id': mongojs.ObjectId(),
-                        'message':req.body.message,
-                        'dateCreated': new Date(),
-                        'like': 0
-                      }
-                    }
-    } , function(err, result){
-    if(err){
-      res.status(500).send(err)
-    }
-    res.status(200).json(result)
+  if(comment_id != 0){
+    console.log(comment_id)
+
+    db.user_posts.find({'comments._id':mongojs.ObjectId(req.body.comment_id)},{comments:{$slice: [1,1]}},function(err, result){
+      if(err){
+        res.status(500).send(err)
+      }
+      res.status(200).json(result)
+    })
+
     return
-  })
+
+
+
+
+    db.user_posts.update({
+      _id: mongojs.ObjectId(req.body.post_id),
+      "comments._id":mongojs.ObjectId(req.body.comment_id),
+      // "comments._id": mongojs.ObjectId('5984496416d24152cfe64d7c')
+    }, {$push: {'comments.$.child_comment':{
+                          'user':req.body.user_id,
+                          '_id': mongojs.ObjectId(),
+                          'message':req.body.message,
+                          'dateCreated': new Date(),
+                          'like': 0,
+                          'child_comment':[]
+                        }
+               }
+      } , function(err, result){
+      if(err){
+        res.status(500).send(err)
+      }
+      res.status(200).json(result)
+      return
+    })
+
+  }else{
+    db.user_posts.update({
+      _id: mongojs.ObjectId(req.body.post_id)
+    }, {$push: {'comments':{
+                          'user':req.body.user_id,
+                          '_id': mongojs.ObjectId(),
+                          'message':req.body.message,
+                          'dateCreated': new Date(),
+                          'like': 0,
+                          'child_comment':[]
+                        }
+                      }
+      } , function(err, result){
+      if(err){
+        res.status(500).send(err)
+      }
+      res.status(200).json(result)
+      return
+    })
+  }
+
+
 
 
 })
 
 
 router.get('/lists',function(req, res, next){
-  db.user_posts.find({},{comments:{$slice: [1,2]}},function(err, results){
+  db.user_posts.find({},{comments:{$slice: [1,900]}},function(err, results){
       if(err){
         res.status(500).send(err)
       }
@@ -123,6 +162,42 @@ router.put('/like-comment',function(req, res, next){
   })
 
 
+})
+
+router.delete('/delete-comment',function(req, res, next){
+
+  if(!req.body.user_id || !req.body.post_id || !req.body.comment_id){
+    res.status(400).json({'status':0,'msg':'unauthorise access'})
+    return
+  }
+
+  db.user_posts.update({ _id: mongojs.ObjectId(req.body.post_id),
+                        "comments._id":mongojs.ObjectId(req.body.comment_id) },
+                        {$pull: {comments: {_id: mongojs.ObjectId(req.body.comment_id)}}}
+                        ,function(err, result){
+                          if(err){
+                            res.status(500).send(err)
+                          }
+                          res.status(200).json(result)
+                          return
+
+                          })
+})
+
+
+router.delete('/delete-post',function(req, res, next){
+    if(!req.body.user_id || !req.body.post_id){
+      res.status(400).json({'status':0,'msg':'unauthorise access'})
+      return
+    }
+
+    db.user_posts.remove({_id: mongojs.ObjectId(req.body.post_id)},function(err, result){
+      if(err){
+        res.status(500).send(err)
+      }
+      res.status(200).json(result)
+      return
+    })
 })
 
 
