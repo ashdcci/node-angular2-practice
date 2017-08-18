@@ -1,0 +1,24 @@
+<!--component html goes here -->
+
+<div class="post-list">
+	<div *ngFor="let post of post">
+
+		<div class="col-md-1">
+      <div *ngif="post.num_comment > 0; then check_template else other_check"></div>
+      <ng-template #check_template>
+        <input type="checkbox" checked (click)="likePost(post._id,1)" />
+      </ng-template>
+      <ng-template #other_check>
+        <input type="checkbox" (click)="likePost(post._id,0)" />
+      </ng-template>
+		</div>
+		<div class="col-md-7">
+			{{post.title}}
+		</div>
+		<div class="col-md-4">
+			<input type="button" (click)="deletePost(post._id)" value="delete" class="btn btn-danger">
+		</div>
+		<br/><br/>
+	</div>
+
+</div>

@@ -10,7 +10,7 @@ export class TaskService{
 	}
 
 	getTasks(){
-		return this.http.get('/api/tasks')
+		return this.http.get('/api/tasks/tasks')
 				.map(res => res.json())
 	}
 
@@ -18,11 +18,11 @@ export class TaskService{
 	console.log(newTask,JSON.stringify(newTask))
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.post('/api/task', newTask, {headers: headers})
+        return this.http.post('/api/tasks/task', newTask, {headers: headers})
             .map(res => res.json());
     }
 
     deleteTask(id){
-    	return this.http.delete('/api/task/'+id).map(res=> res.json())
+    	return this.http.delete('/api/tasks/task/'+id).map(res=> res.json())
     }
 }

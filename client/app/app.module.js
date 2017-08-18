@@ -12,19 +12,20 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var app_component_1 = require("./app.component");
 var tasks_component_1 = require("./components/tasks/tasks.component");
+var posts_component_1 = require("./components/posts/posts.component");
 var file_component_1 = require("./components/upload/file.component");
 var app_routes_1 = require("./app.routes");
 var AppModule = (function () {
     function AppModule() {
     }
+    AppModule = __decorate([
+        core_1.NgModule({
+            imports: [app_routes_1.routing, platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule],
+            declarations: [app_component_1.AppComponent, tasks_component_1.TasksComponent, file_component_1.SimpleDemoComponent, posts_component_1.PostsComponent],
+            bootstrap: [app_component_1.AppComponent]
+        })
+    ], AppModule);
     return AppModule;
 }());
-AppModule = __decorate([
-    core_1.NgModule({
-        imports: [app_routes_1.routing, platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule],
-        declarations: [app_component_1.AppComponent, tasks_component_1.TasksComponent, file_component_1.SimpleDemoComponent],
-        bootstrap: [app_component_1.AppComponent]
-    })
-], AppModule);
 exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

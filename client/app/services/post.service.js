@@ -13,30 +13,26 @@ var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
 var http_2 = require("@angular/http");
-var TaskService = (function () {
-    function TaskService(http) {
+var PostService = (function () {
+    function PostService(http) {
         this.http = http;
-        console.log('Task Service initialised...');
+        console.log('Post Service initialised...');
     }
-    TaskService.prototype.getTasks = function () {
-        return this.http.get('/api/tasks/tasks')
+    PostService.prototype.getPosts = function () {
+        return this.http.get('/api/posts/fetch-all-post/0')
             .map(function (res) { return res.json(); });
     };
-    TaskService.prototype.addTask = function (newTask) {
-        console.log(newTask, JSON.stringify(newTask));
+    PostService.prototype.likePost = function (id) {
         var headers = new http_2.Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.post('/api/tasks/task', newTask, { headers: headers })
+        return this.http.put('/api/posts/like_post/' + id, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    TaskService.prototype.deleteTask = function (id) {
-        return this.http.delete('/api/tasks/task/' + id).map(function (res) { return res.json(); });
-    };
-    TaskService = __decorate([
+    PostService = __decorate([
         core_1.Injectable(),
         __metadata("design:paramtypes", [http_1.Http])
-    ], TaskService);
-    return TaskService;
+    ], PostService);
+    return PostService;
 }());
-exports.TaskService = TaskService;
-//# sourceMappingURL=task.service.js.map
+exports.PostService = PostService;
+//# sourceMappingURL=post.service.js.map

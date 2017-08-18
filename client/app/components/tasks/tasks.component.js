@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var task_service_1 = require("../../services/task.service");
 var TasksComponent = (function () {
@@ -39,15 +40,15 @@ var TasksComponent = (function () {
             }
         });
     };
+    TasksComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'tasks',
+            templateUrl: 'tasks.component.html'
+        }),
+        __metadata("design:paramtypes", [task_service_1.TaskService])
+    ], TasksComponent);
     return TasksComponent;
 }());
-TasksComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'tasks',
-        templateUrl: 'tasks.component.html'
-    }),
-    __metadata("design:paramtypes", [task_service_1.TaskService])
-], TasksComponent);
 exports.TasksComponent = TasksComponent;
 //# sourceMappingURL=tasks.component.js.map

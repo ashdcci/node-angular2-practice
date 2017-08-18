@@ -16,14 +16,14 @@ var SimpleDemoComponent = (function () {
         var files = event.srcElement.files;
         console.log(files);
     };
+    SimpleDemoComponent = __decorate([
+        core_1.Component({
+            moduleId: module.id,
+            selector: 'simple-demo',
+            templateUrl: './upload.component.html'
+        })
+    ], SimpleDemoComponent);
     return SimpleDemoComponent;
 }());
-SimpleDemoComponent = __decorate([
-    core_1.Component({
-        moduleId: module.id,
-        selector: 'simple-demo',
-        templateUrl: './upload.component.html'
-    })
-], SimpleDemoComponent);
 exports.SimpleDemoComponent = SimpleDemoComponent;
 //# sourceMappingURL=file.component.js.map
