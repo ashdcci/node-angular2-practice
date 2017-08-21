@@ -10,5 +10,5 @@ var appRoutes = [
     { path: 'posts', component: posts_component_1.PostsComponent },
     { path: 'upload', component: file_component_1.SimpleDemoComponent }
 ];
-exports.routing = router_1.RouterModule.forRoot(appRoutes);
+exports.routing = router_1.RouterModule.forRoot(appRoutes, { useHash: true });
 //# sourceMappingURL=app.routes.js.map

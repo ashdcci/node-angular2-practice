@@ -4,13 +4,8 @@
 	<div *ngFor="let post of post">
 
 		<div class="col-md-1">
-      <div *ngif="post.num_comment > 0; then check_template else other_check"></div>
-      <ng-template #check_template>
-        <input type="checkbox" checked (click)="likePost(post._id,1)" />
-      </ng-template>
-      <ng-template #other_check>
-        <input type="checkbox" (click)="likePost(post._id,0)" />
-      </ng-template>
+      <div *ngIf="post.num_comment>0"><input type="checkbox" checked (click)="likePost(post._id,1)" /></div>
+			<div *ngIf="post.num_comment === 0"><input type="checkbox" (click)="likePost(post._id,0)" /></div>
 		</div>
 		<div class="col-md-7">
 			{{post.title}}
