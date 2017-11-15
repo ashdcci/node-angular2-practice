@@ -11,8 +11,8 @@ export class PostsComponent {
   title:string
   constructor(private postService:PostService){
 		this.postService.getPosts()
-			.subscribe(posts => {
-
+			.then(posts => {
+        console.log(posts)
         this.post = posts
 			})
 	}

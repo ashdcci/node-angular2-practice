@@ -8,19 +8,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
 var http_2 = require("@angular/http");
+require("rxjs/add/operator/toPromise");
+var Post = [];
 var PostService = (function () {
     function PostService(http) {
         this.http = http;
         console.log('Post Service initialised...');
     }
     PostService.prototype.getPosts = function () {
+        // return Promise.resolve(this.http.get('/api/posts/fetch-all-post/0')
+        // 		.map(res => res.json()))
         return this.http.get('/api/posts/fetch-all-post/0')
-            .map(function (res) { return res.json(); });
+            .toPromise()
+            .then(function (response) { return response.json().data; })
+            .catch(this.handleError);
+    };
+    PostService.prototype.handleError = function (error) {
+        console.error('An error occurred', error); // for demo purposes only
+        return Promise.reject(error.message || error);
     };
     PostService.prototype.likePost = function (id) {
         var headers = new http_2.Headers();
@@ -28,11 +37,11 @@ var PostService = (function () {
         return this.http.put('/api/posts/like_post/' + id, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    PostService = __decorate([
-        core_1.Injectable(),
-        __metadata("design:paramtypes", [http_1.Http])
-    ], PostService);
     return PostService;
 }());
+PostService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], PostService);
 exports.PostService = PostService;
 //# sourceMappingURL=post.service.js.map

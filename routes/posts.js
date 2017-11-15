@@ -222,7 +222,9 @@ router.post('/add-post',function(req, res, next){
   db.posts.save({
     'title': tomodel.title,
     'description': tomodel.description,
-    'uid': mongojs.ObjectId(tomodel.by)
+    'uid': mongojs.ObjectId(tomodel.by),
+    'created_at': tomodel.created_at,
+    'likes':[]
   },function(err, result){
     if(err){
       res.status(500).send(err)
@@ -328,6 +330,16 @@ router.get('/fetch-all-post/:page',function(req, res, next){
 
   user_post = []
 
+
+  db.posts.find({},function(err,post){
+    if(err){
+      res.status(500).send(err)
+      return
+    }
+    res.json(post)
+  })
+  return
+
   // db.ships.aggregate([{$project : {_id : 0, operator : {$toLower : "$operator"},crew : {"$multiply" : ["$crew",10]}}},
   //                     {$group : {_id : "$operator", num_ships : {$sum : "$crew"}}}])
 
@@ -345,11 +357,14 @@ router.get('/fetch-all-post/:page',function(req, res, next){
       $project: {
         _id: "$_id",
         title: "$title",
-        num_comment: {$size:"$comment"},
+        num_likes: {$size:"$likes"},
+        likes: "$likes",
+        created_at: "$created_at",
+        num_comment: 0,
         comment: {$slice:["$comment",10]},
       }
     }
-  ],function(err, post){
+  ]).limit(10).skip(limiter,function(err, post){
     if(err){
       res.status(500).send(err)
       return
@@ -432,7 +447,25 @@ router.put('/like_comment',function(req, res, next){
 })
 
 
+router.put('/like_post',function(req, res, next){
+  if(!req.body.post_id || !req.body.user_id){
+    res.status(400).json({'status':0,'msg':'not authenticate to like comment'})
+    return
+  }
 
+  query = ( typeof req.body.check !== 'undefined' && req.body.check == 1 ) ? {$addToSet: {'likes':req.body.user_id}} :  {$pull: {'likes':req.body.user_id}}
+
+
+  db.posts.update({'_id':mongojs.ObjectId(req.body.post_id)},query,function(err,result){
+    if(err){
+      res.status(500).send(err)
+      return
+    }
+    res.json(result)
+  })
+
+  return
+})
 
 
 

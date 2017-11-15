@@ -6,7 +6,7 @@ var index = require('./routes/index');
 var tasks = require('./routes/tasks');
 var posts = require('./routes/posts');
 
-var port = 3002;
+var port = 3001;
 
 var app = express();
 
